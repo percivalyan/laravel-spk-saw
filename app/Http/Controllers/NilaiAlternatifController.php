@@ -116,11 +116,79 @@ class NilaiAlternatifController extends Controller
 
         arsort($hasilSAW);
 
-        return view('panel.nilai-alternatif.hasil', [
+        return view('panel.nilai-alternatif.hasil_saw', [
             'hasilSAW' => $hasilSAW,
             'alternatifs' => $alternatifs->keyBy('id'),
             'normalisasi' => $normalisasi,
             'kriterias' => $kriterias,
+        ]);
+    }
+
+    public function hitungWP()
+    {
+        $alternatifs = Alternatif::with('nilaiAlternatif.kriteria')->get();
+        $kriterias = Kriteria::all();
+
+        // Hitung total bobot
+        $totalBobot = $kriterias->sum('bobot');
+
+        // Hitung bobot perbaikan (w)
+        $bobotPerbaikan = [];
+        foreach ($kriterias as $kriteria) {
+            $bobotPerbaikan[$kriteria->id] = $kriteria->bobot / $totalBobot;
+        }
+
+        // Hitung nilai vektor S dan simpan detail perhitungan
+        $nilaiS = [];
+        $perhitunganS = [];
+
+        foreach ($alternatifs as $alt) {
+            $produk = 1;
+            $uraian = [];
+
+            foreach ($alt->nilaiAlternatif as $na) {
+                $nilai = $na->nilai;
+                $kriteria = $na->kriteria;
+                $w = $bobotPerbaikan[$kriteria->id];
+                $pangkat = $kriteria->jenis == 'benefit' ? $w : -$w;
+
+                $hasilPangkat = pow($nilai, $pangkat);
+                $produk *= $hasilPangkat;
+
+                $uraian[] = [
+                    'kriteria' => $kriteria,
+                    'nilai' => $nilai,
+                    'w' => $w,
+                    'jenis' => $kriteria->jenis,
+                    'pangkat' => $pangkat,
+                    'hasil' => $hasilPangkat,
+                ];
+            }
+
+            $nilaiS[$alt->id] = $produk;
+            $perhitunganS[$alt->id] = $uraian;
+        }
+
+        // Hitung total S (ΣS)
+        $totalS = array_sum($nilaiS);
+
+        // Hitung nilai V
+        $nilaiV = [];
+        foreach ($nilaiS as $id => $s) {
+            $nilaiV[$id] = $s / $totalS;
+        }
+
+        // Urutkan berdasarkan nilai V tertinggi
+        arsort($nilaiV);
+
+        return view('panel.nilai-alternatif.hasil_wp', [
+            'alternatifs' => $alternatifs->keyBy('id'),
+            'kriterias' => $kriterias,
+            'bobotPerbaikan' => $bobotPerbaikan,
+            'nilaiS' => $nilaiS,
+            'nilaiV' => $nilaiV,
+            'totalS' => $totalS,
+            'perhitunganS' => $perhitunganS,
         ]);
     }
 

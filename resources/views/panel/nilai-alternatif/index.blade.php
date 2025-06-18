@@ -12,7 +12,8 @@
                     @if (session('success'))
                         <div class="alert alert-success">{{ session('success') }}</div>
                     @endif
-                    <a href="{{ route('nilai-alternatif.hitung') }}" class="btn btn-success mb-3">Hitung Normalisasi</a>
+                    <a href="{{ route('nilai-alternatif.hitung_saw') }}" class="btn btn-primary mb-3">Hitung Normalisasi SAW</a>
+                    <a href="{{ route('nilai-alternatif.hitung_wp') }}" class="btn btn-success mb-3">Hitung Normalisasi WP</a>
                     <div class="table-responsive">
                         <table class="table table-bordered table-striped">
                             <thead class="table-light">

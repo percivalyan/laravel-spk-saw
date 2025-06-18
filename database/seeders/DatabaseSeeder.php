@@ -19,7 +19,8 @@ class DatabaseSeeder extends Seeder
             PermissionSeeder::class,
             PermissionRoleSeeder::class,
             CategorySeeder::class,
-            SPKSeeder::class,
+            // SPKSAW1Seeder::class,
+            SPKWP1Seeder::class,
             // KriteriaSeeder::class, // php artisan db:seed --class=KriteriaSeeder
             // AlternatifSeeder::class, // php artisan db:seed --class=AlternatifSeeder
         ]);

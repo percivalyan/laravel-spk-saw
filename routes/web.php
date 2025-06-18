@@ -67,5 +67,6 @@ Route::group(['middleware' => 'useradmin'], function () {
     Route::delete('/nilai-alternatif/{id}', [NilaiAlternatifController::class, 'destroy'])->name('nilai-alternatif.destroy');
 
     // Hitung nilai menggunakan metode SAW
-    Route::get('/nilai-alternatif/hitung/saw', [NilaiAlternatifController::class, 'hitungSAW'])->name('nilai-alternatif.hitung');
+    Route::get('/nilai-alternatif/hitung/saw', [NilaiAlternatifController::class, 'hitungSAW'])->name('nilai-alternatif.hitung_saw');
+    Route::get('/nilai-alternatif/hitung/wp', [NilaiAlternatifController::class, 'hitungWP'])->name('nilai-alternatif.hitung_wp');
 });

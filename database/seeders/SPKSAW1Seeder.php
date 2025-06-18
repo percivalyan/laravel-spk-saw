@@ -7,7 +7,7 @@ use App\Models\Alternatif;
 use App\Models\Kriteria;
 use App\Models\NilaiAlternatif;
 
-class SPKSeeder extends Seeder
+class SPKSAW1Seeder extends Seeder
 {
     public function run(): void
     {
