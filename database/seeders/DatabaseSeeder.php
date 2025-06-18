@@ -18,9 +18,10 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             PermissionSeeder::class,
             PermissionRoleSeeder::class,
-            CategorySeeder::class, // php artisan db:seed --class=AlternatifSeeder
-            KriteriaSeeder::class, // php artisan db:seed --class=KriteriaSeeder
-            AlternatifSeeder::class,
+            CategorySeeder::class,
+            SPKSeeder::class,
+            // KriteriaSeeder::class, // php artisan db:seed --class=KriteriaSeeder
+            // AlternatifSeeder::class, // php artisan db:seed --class=AlternatifSeeder
         ]);
     }
 }
