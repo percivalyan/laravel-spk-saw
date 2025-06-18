@@ -31,10 +31,19 @@
 
 ### Clone the repository
 ```bash
-git clone {{this repository}}
+git clone https://github.com/percivalyan/laravel-spk-saw.git
 ```
 ```bash
 cd laravel-spk-saw
+```
+
+### Alternative Clone / Copy Repository
+```
+Click the <> Code icon, then select the "Download ZIP" option to download a copy of the repository directly to your computer.
+```
+```
+After extracting the ZIP file, navigate to the corresponding directory on your computer, for example:
+C:\yourdirectory\laravel-saw-spk-main
 ```
 
 ### Install PHP dependencies
