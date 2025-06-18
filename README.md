@@ -82,5 +82,5 @@ https://jurnal.lldikti4.or.id/index.php/jurnaltekno/article/download/71/65/
 
 #### WEIGHTED PRODUCT
 ```bash
-
+https://ejournal.itn.ac.id/index.php/jati/article/download/9513/5565/
 ```
