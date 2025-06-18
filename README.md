@@ -1,4 +1,4 @@
-# Laravel Permission: Role-Based Access Control (RBAC)
+# Laravel SPK
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Laravel Version](https://img.shields.io/badge/Laravel-12.x-red.svg)](https://laravel.com)
@@ -31,10 +31,10 @@
 
 ### Clone the repository
 ```bash
-git clone https://github.com/percivalyan/laravel-rbac.git
+git clone {{this repository}}
 ```
 ```bash
-cd laravel-rbac
+cd laravel-spk-saw
 ```
 
 ### Install PHP dependencies
@@ -72,4 +72,15 @@ php artisan migrate --seed
 ### Start development server
 ```bash
 php artisan serve
+```
+
+### Journal List Tested
+#### SIMPLE ADDITIVE WEIGHTING
+```bash
+https://jurnal.lldikti4.or.id/index.php/jurnaltekno/article/download/71/65/
+```
+
+#### WEIGHTED PRODUCT
+```bash
+
 ```
