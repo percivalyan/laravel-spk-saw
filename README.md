@@ -93,3 +93,8 @@ https://jurnal.lldikti4.or.id/index.php/jurnaltekno/article/download/71/65/
 ```bash
 https://ejournal.itn.ac.id/index.php/jati/article/download/9513/5565/
 ```
+
+#### TECHNIQUE FOR ORDER PREFERENCE BY SIMILARITY TO IDEAL SOLUTION
+```bash
+https://ejurnal.seminar-id.com/index.php/tin/article/view/840
+```
