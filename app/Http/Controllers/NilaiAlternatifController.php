@@ -192,6 +192,98 @@ class NilaiAlternatifController extends Controller
         ]);
     }
 
+    public function hitungTOPSIS()
+    {
+        $alternatifs = Alternatif::with('nilaiAlternatif.kriteria')->get();
+        $kriterias = Kriteria::all();
+
+        // 1. Buat matriks R (normalisasi)
+        $matriksR = [];
+        $pembagi = [];
+
+        foreach ($kriterias as $kriteria) {
+            $nilaiKriteria = NilaiAlternatif::where('kriteria_id', $kriteria->id)->pluck('nilai');
+            $pembagi[$kriteria->id] = sqrt($nilaiKriteria->sum(function ($n) {
+                return pow($n, 2);
+            }));
+        }
+
+        foreach ($alternatifs as $alt) {
+            $matriksR[$alt->id] = [];
+            foreach ($alt->nilaiAlternatif as $na) {
+                $kriteriaId = $na->kriteria_id;
+                $nilai = $na->nilai / $pembagi[$kriteriaId];
+                $matriksR[$alt->id][$kriteriaId] = $nilai;
+            }
+        }
+
+        // 2. Matriks terbobot Yij = rij * wj
+        $matriksY = [];
+        foreach ($matriksR as $altId => $nilaiKriterias) {
+            $matriksY[$altId] = [];
+            foreach ($nilaiKriterias as $kriteriaId => $r) {
+                $bobot = $kriterias->firstWhere('id', $kriteriaId)->bobot;
+                $matriksY[$altId][$kriteriaId] = $r * $bobot;
+            }
+        }
+
+        // 3. Tentukan solusi ideal positif dan negatif
+        $solusiPositif = [];
+        $solusiNegatif = [];
+
+        foreach ($kriterias as $kriteria) {
+            $kolomNilai = array_column($matriksY, $kriteria->id);
+            if ($kriteria->jenis == 'benefit') {
+                $solusiPositif[$kriteria->id] = max($kolomNilai);
+                $solusiNegatif[$kriteria->id] = min($kolomNilai);
+            } else {
+                $solusiPositif[$kriteria->id] = min($kolomNilai);
+                $solusiNegatif[$kriteria->id] = max($kolomNilai);
+            }
+        }
+
+        // 4. Hitung jarak ke solusi ideal
+        $jarakPositif = [];
+        $jarakNegatif = [];
+
+        foreach ($matriksY as $altId => $nilaiKriterias) {
+            $sumDPlus = 0;
+            $sumDMin = 0;
+
+            foreach ($nilaiKriterias as $kriteriaId => $y) {
+                $sumDPlus += pow($y - $solusiPositif[$kriteriaId], 2);
+                $sumDMin += pow($y - $solusiNegatif[$kriteriaId], 2);
+            }
+
+            $jarakPositif[$altId] = sqrt($sumDPlus);
+            $jarakNegatif[$altId] = sqrt($sumDMin);
+        }
+
+        // 5. Hitung nilai preferensi V = D- / (D+ + D-)
+        $nilaiPreferensi = [];
+        foreach ($alternatifs as $alt) {
+            $id = $alt->id;
+            $dPlus = $jarakPositif[$id];
+            $dMin = $jarakNegatif[$id];
+            $nilaiPreferensi[$id] = $dMin / ($dPlus + $dMin);
+        }
+
+        // 6. Urutkan hasil preferensi
+        arsort($nilaiPreferensi);
+
+        return view('panel.nilai-alternatif.hasil_topsis', [
+            'alternatifs' => $alternatifs->keyBy('id'),
+            'kriterias' => $kriterias,
+            'matriksR' => $matriksR,
+            'matriksY' => $matriksY,
+            'solusiPositif' => $solusiPositif,
+            'solusiNegatif' => $solusiNegatif,
+            'jarakPositif' => $jarakPositif,
+            'jarakNegatif' => $jarakNegatif,
+            'nilaiPreferensi' => $nilaiPreferensi,
+        ]);
+    }
+
     public function destroy($id)
     {
         NilaiAlternatif::where('alternatif_id', $id)->delete();

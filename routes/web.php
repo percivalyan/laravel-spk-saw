@@ -69,4 +69,5 @@ Route::group(['middleware' => 'useradmin'], function () {
     // Hitung nilai menggunakan metode SAW
     Route::get('/nilai-alternatif/hitung/saw', [NilaiAlternatifController::class, 'hitungSAW'])->name('nilai-alternatif.hitung_saw');
     Route::get('/nilai-alternatif/hitung/wp', [NilaiAlternatifController::class, 'hitungWP'])->name('nilai-alternatif.hitung_wp');
+    Route::get('/nilai-alternatif/hitung/topsis', [NilaiAlternatifController::class, 'hitungTOPSIS'])->name('nilai-alternatif.hitung_topsis');
 });
