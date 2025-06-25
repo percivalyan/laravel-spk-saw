@@ -13,6 +13,21 @@
                     <h5 class="fw-bold mb-3">1. Perbaikan Bobot (Normalisasi)</h5>
                     <p><img src="https://latex.codecogs.com/png.image?\dpi{110}w_j'=\frac{w_j}{\sum w_j}" alt="LaTeX Rumus" />
                     </p>
+
+                    <h6 class="fw-bold">Penjabaran Perhitungan:</h6>
+                    <p>
+                        Total Bobot =
+                        @foreach ($kriterias as $k)
+                            {{ $k->bobot }}{{ !$loop->last ? ' + ' : ' = ' }}
+                        @endforeach
+                        {{ $kriterias->sum('bobot') }}<br>
+
+                        @foreach ($kriterias as $k)
+                            w<sub>{{ $k->kode }}</sub>' = {{ $k->bobot }} / {{ $kriterias->sum('bobot') }} =
+                            {{ number_format($bobotPerbaikan[$k->id], 4) }}<br>
+                        @endforeach
+                    </p>
+
                     <div class="table-responsive mb-4">
                         <table class="table table-bordered table-striped">
                             <thead class="table-light">
@@ -40,9 +55,24 @@
                     <h5 class="fw-bold mb-3">2. Menetapkan Vektor S</h5>
                     <p><img src="https://latex.codecogs.com/png.image?\dpi{110}S_i=\prod x_{ij}^{w_j'}\quad(\text{cost}\rightarrow w_j'\text{ menjadi negatif})"
                             alt="Rumus Si" /></p>
+
                     @foreach ($perhitunganS as $alt_id => $details)
                         <div class="mb-4">
                             <h6 class="fw-bold mb-2">Alternatif: {{ $alternatifs[$alt_id]->nama }}</h6>
+
+                            {{-- Penjabaran Manual --}}
+                            <p>
+                                S<sub>{{ $alt_id }}</sub> =
+                                @foreach ($details as $index => $d)
+                                    ({{ $d['nilai'] }})
+                                    <sup>{{ $d['jenis'] == 'benefit' ? number_format($d['w'], 4) : '-' . number_format($d['w'], 4) }}</sup>
+                                    @if (!$loop->last)
+                                        ×
+                                    @endif
+                                @endforeach
+                            </p>
+
+                            {{-- Detail List --}}
                             <ul class="mb-2">
                                 @foreach ($details as $d)
                                     <li>
@@ -51,6 +81,7 @@
                                     </li>
                                 @endforeach
                             </ul>
+
                             <strong>S{{ $alt_id }} = {{ number_format($nilaiS[$alt_id], 6) }}</strong>
                         </div>
                     @endforeach
@@ -63,12 +94,13 @@
                     <h5 class="fw-bold mb-3">4. Menetapkan Vektor V</h5>
                     <p><img src="https://latex.codecogs.com/png.image?\dpi{110}V_i=\frac{S_i}{\sum S_i}" alt="Rumus Vi" />
                     </p>
+
                     <ul class="mb-4">
                         @foreach ($nilaiV as $alt_id => $v)
                             <li>
-                                V{{ $alt_id }} =
-                                {{ number_format($nilaiS[$alt_id], 6) }} / {{ number_format($totalS, 6) }}
-                                = <strong>{{ number_format($v, 9) }}</strong>
+                                V{{ $alt_id }} = {{ number_format($nilaiS[$alt_id], 6) }} /
+                                {{ number_format($totalS, 6) }} =
+                                <strong>{{ number_format($v, 9) }}</strong>
                             </li>
                         @endforeach
                     </ul>

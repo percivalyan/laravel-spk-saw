@@ -13,13 +13,13 @@ class JournalSeeder extends Seeder
     {
         // 1. Insert Kriteria
         $kriteriaData = [
-            ['kode' => 'C1', 'nama' => 'ScreenResolution', 'bobot' => 4, 'jenis' => 'benefit'],
-            ['kode' => 'C2', 'nama' => 'Cpu', 'bobot' => 5, 'jenis' => 'benefit'],
-            ['kode' => 'C3', 'nama' => 'Ram', 'bobot' => 3, 'jenis' => 'benefit'],
+            ['kode' => 'C1', 'nama' => 'ScreenResolution', 'bobot' => 1, 'jenis' => 'benefit'],
+            ['kode' => 'C2', 'nama' => 'Cpu', 'bobot' => 1, 'jenis' => 'benefit'],
+            ['kode' => 'C3', 'nama' => 'Ram', 'bobot' => 1, 'jenis' => 'benefit'],
             ['kode' => 'C4', 'nama' => 'Memory', 'bobot' => 2, 'jenis' => 'benefit'],
             ['kode' => 'C5', 'nama' => 'Gpu', 'bobot' => 2, 'jenis' => 'benefit'],
-            ['kode' => 'C6', 'nama' => 'Weight', 'bobot' => 3, 'jenis' => 'cost'],
-            ['kode' => 'C7', 'nama' => 'Price_euros', 'bobot' => 4, 'jenis' => 'cost'],
+            ['kode' => 'C6', 'nama' => 'Weight', 'bobot' => 1, 'jenis' => 'cost'],
+            ['kode' => 'C7', 'nama' => 'Price_euros', 'bobot' => 2, 'jenis' => 'cost'],
         ];
 
         foreach ($kriteriaData as $kriteria) {

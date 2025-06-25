@@ -23,52 +23,74 @@
                     <p><img src="https://latex.codecogs.com/png.image?\dpi{120}r_{ij}=\frac{x_{ij}}{\sqrt{\sum_{i=1}^{m}x_{ij}^2}}"
                             alt="Persamaan Normalisasi" /></p>
 
-                    @foreach ($matriksR as $alt_id => $nilai)
-                        <p><strong>{{ $alternatifs[$alt_id]->nama ?? 'A' . $alt_id }}:</strong></p>
-                        <ul>
-                            @foreach ($kriterias as $kriteria)
-                                @php
-                                    $x_ij = $matriksR[$alt_id][$kriteria->id] * ($pembagi[$kriteria->id] ?? 1);
-                                    $sum_x2 = ($pembagi[$kriteria->id] ?? 1) ** 2;
-                                    $sqrt_sum = sqrt($sum_x2);
-                                    $rij = $sqrt_sum != 0 ? $x_ij / $sqrt_sum : 0;
-                                @endphp
-                                <li>
-                                    \( r_{{ $alt_id + 1 }}{{ $kriteria->kode }} = \frac{ {{ $x_ij }} }{ \sqrt{
-                                    {{ number_format($sum_x2, 4) }} } } = \frac{ {{ $x_ij }} }{
-                                    {{ number_format($sqrt_sum, 4) }} } = {{ number_format($rij, 4) }} \)
-                                </li>
-                            @endforeach
-                        </ul>
-                    @endforeach
+                    <div class="table-responsive mb-4">
+                        <table class="table table-bordered">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Alternatif</th>
+                                    @foreach ($kriterias as $kriteria)
+                                        <th>{{ $kriteria->kode }}</th>
+                                    @endforeach
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($matriksR as $alt_id => $nilai)
+                                    <tr>
+                                        <td>{{ $alternatifs[$alt_id]->nama ?? 'A' . $alt_id }}</td>
+                                        @foreach ($kriterias as $kriteria)
+                                            @php
+                                                $x_ij =
+                                                    $matriksR[$alt_id][$kriteria->id] * ($pembagi[$kriteria->id] ?? 1);
+                                                $sum_x2 = ($pembagi[$kriteria->id] ?? 1) ** 2;
+                                                $sqrt_sum = sqrt($sum_x2);
+                                                $rij = $sqrt_sum != 0 ? $x_ij / $sqrt_sum : 0;
+                                            @endphp
+                                            <td>{{ number_format($rij, 4) }}</td>
+                                        @endforeach
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
 
                     <h5 class="fw-bold">3. Matriks Terbobot</h5>
                     <p><img src="https://latex.codecogs.com/png.image?\dpi{120}Y_{ij}=r_{ij} \times w_{j}"
                             alt="Persamaan Matriks Terbobot" /></p>
 
-                    @foreach ($matriksY as $alt_id => $nilai)
-                        <p><strong>{{ $alternatifs[$alt_id]->nama ?? 'A' . $alt_id }}:</strong></p>
-                        <ul>
-                            @foreach ($kriterias as $kriteria)
-                                @php
-                                    $rij = $matriksR[$alt_id][$kriteria->id] ?? 0;
-                                    $w = $kriteria->bobot;
-                                    $yij = $rij * $w;
-                                @endphp
-                                <li>
-                                    \( Y_{{ $alt_id + 1 }}{{ $kriteria->kode }} = {{ number_format($rij, 4) }} \times
-                                    {{ $w }} = {{ number_format($yij, 4) }} \)
-                                </li>
-                            @endforeach
-                        </ul>
-                    @endforeach
+                    <div class="table-responsive mb-4">
+                        <table class="table table-bordered">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Alternatif</th>
+                                    @foreach ($kriterias as $kriteria)
+                                        <th>{{ $kriteria->kode }}</th>
+                                    @endforeach
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($matriksY as $alt_id => $nilai)
+                                    <tr>
+                                        <td>{{ $alternatifs[$alt_id]->nama ?? 'A' . $alt_id }}</td>
+                                        @foreach ($kriterias as $kriteria)
+                                            @php
+                                                $rij = $matriksR[$alt_id][$kriteria->id] ?? 0;
+                                                $w = $kriteria->bobot;
+                                                $yij = $rij * $w;
+                                            @endphp
+                                            <td>{{ number_format($yij, 4) }}</td>
+                                        @endforeach
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
 
                     <h5 class="fw-bold">4. Solusi Ideal Positif & Negatif</h5>
                     <p>
-                        <img src="https://latex.codecogs.com/png.image?\dpi{120}A^+ = \left\{ \max(Y_{ij}) \text{ if benefit, } \min(Y_{ij}) \text{ if cost} \right\}"
-                            alt="Solusi Ideal Positif" /><br>
-                        <img src="https://latex.codecogs.com/png.image?\dpi{120}A^- = \left\{ \min(Y_{ij}) \text{ if benefit, } \max(Y_{ij}) \text{ if cost} \right\}"
-                            alt="Solusi Ideal Negatif" />
+                        <img
+                            src="https://latex.codecogs.com/png.image?\dpi{120}A^+ = \left\{ \max(Y_{ij}) \text{ if benefit, } \min(Y_{ij}) \text{ if cost} \right\}" /><br>
+                        <img
+                            src="https://latex.codecogs.com/png.image?\dpi{120}A^- = \left\{ \min(Y_{ij}) \text{ if benefit, } \max(Y_{ij}) \text{ if cost} \right\}" />
                     </p>
 
                     <div class="table-responsive mb-4">
@@ -94,11 +116,16 @@
 
                     <h5 class="fw-bold">5. Jarak ke Solusi Ideal</h5>
                     <p>
-                        <img src="https://latex.codecogs.com/png.image?\dpi{120}D_i^+ = \sqrt{\sum_{j=1}^{n}(Y_{ij}-Y_j^+)^2}"
-                            alt="Jarak ke Ideal Positif" /><br>
-                        <img src="https://latex.codecogs.com/png.image?\dpi{120}D_i^- = \sqrt{\sum_{j=1}^{n}(Y_{ij}-Y_j^-)^2}"
-                            alt="Jarak ke Ideal Negatif" />
+                        <img
+                            src="https://latex.codecogs.com/png.image?\dpi{120}D_i^+ = \sqrt{\sum_{j=1}^{n}(Y_{ij}-Y_j^+)^2}" /><br>
+                        <img
+                            src="https://latex.codecogs.com/png.image?\dpi{120}D_i^- = \sqrt{\sum_{j=1}^{n}(Y_{ij}-Y_j^-)^2}" />
                     </p>
+
+                    @php
+                        $jarakPositif = [];
+                        $jarakNegatif = [];
+                    @endphp
 
                     @foreach ($alternatifs as $alt)
                         @php
@@ -123,29 +150,80 @@
                                     {{ number_format(pow($yij - $aMinus, 2), 4) }} \)
                                 </li>
                             @endforeach
-                            <li>
-                                \( D^+ = \sqrt{ {{ number_format($dPlus, 4) }} } = {{ number_format(sqrt($dPlus), 4) }} \)
-                            </li>
-                            <li>
-                                \( D^- = \sqrt{ {{ number_format($dMinus, 4) }} } = {{ number_format(sqrt($dMinus), 4) }}
-                                \)
-                            </li>
+                            @php
+                                $jarakPositif[$alt->id] = sqrt($dPlus);
+                                $jarakNegatif[$alt->id] = sqrt($dMinus);
+                            @endphp
+                            <li>\( D^+ = \sqrt{ {{ number_format($dPlus, 4) }} } =
+                                {{ number_format($jarakPositif[$alt->id], 4) }} \)</li>
+                            <li>\( D^- = \sqrt{ {{ number_format($dMinus, 4) }} } =
+                                {{ number_format($jarakNegatif[$alt->id], 4) }} \)</li>
                         </ul>
                     @endforeach
 
+                    <div class="table-responsive mb-4">
+                        <table class="table table-bordered">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Alternatif</th>
+                                    <th>Jarak ke A<sup>+</sup> (D<sup>+</sup>)</th>
+                                    <th>Jarak ke A<sup>-</sup> (D<sup>-</sup>)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($alternatifs as $alt)
+                                    <tr>
+                                        <td>{{ $alt->nama }}</td>
+                                        <td>{{ number_format($jarakPositif[$alt->id], 4) }}</td>
+                                        <td>{{ number_format($jarakNegatif[$alt->id], 4) }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+
                     <h5 class="fw-bold">6. Nilai Preferensi</h5>
                     <p>
-                        <img src="https://latex.codecogs.com/png.image?\dpi{120}V_i = \frac{D_i^-}{D_i^+ + D_i^-}"
-                            alt="Nilai Preferensi" />
+                        <img src="https://latex.codecogs.com/png.image?\dpi{120}V_i = \frac{D_i^-}{D_i^+ + D_i^-}" />
                     </p>
 
-                    @foreach ($nilaiPreferensi as $alt_id => $nilai)
+                    @php $nilaiPreferensi = []; @endphp
+                    @foreach ($alternatifs as $alt)
+                        @php
+                            $dPlus = $jarakPositif[$alt->id];
+                            $dMinus = $jarakNegatif[$alt->id];
+                            $vi = $dPlus + $dMinus != 0 ? $dMinus / ($dPlus + $dMinus) : 0;
+                            $nilaiPreferensi[$alt->id] = $vi;
+                        @endphp
                         <p>
-                            \( V_{{ $loop->iteration }} = \frac{ {{ number_format($jarakNegatif[$alt_id], 4) }} }{
-                            {{ number_format($jarakPositif[$alt_id], 4) }} +
-                            {{ number_format($jarakNegatif[$alt_id], 4) }} } = {{ number_format($nilai, 4) }} \)
+                            \( V_{{ $loop->iteration }} = \frac{ {{ number_format($dMinus, 4) }} }{
+                            {{ number_format($dPlus, 4) }} + {{ number_format($dMinus, 4) }} } =
+                            {{ number_format($vi, 4) }} \)
                         </p>
                     @endforeach
+
+                    <div class="table-responsive mb-4">
+                        <table class="table table-bordered">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Alternatif</th>
+                                    <th>D<sup>+</sup></th>
+                                    <th>D<sup>-</sup></th>
+                                    <th>V<sub>i</sub></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($alternatifs as $alt)
+                                    <tr>
+                                        <td>{{ $alt->nama }}</td>
+                                        <td>{{ number_format($jarakPositif[$alt->id], 4) }}</td>
+                                        <td>{{ number_format($jarakNegatif[$alt->id], 4) }}</td>
+                                        <td>{{ number_format($nilaiPreferensi[$alt->id], 4) }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
 
                     <h5 class="fw-bold">7. Hasil Akhir (Ranking)</h5>
                     <div class="table-responsive mb-4">
@@ -158,8 +236,11 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @php $rank = 1; @endphp
-                                @foreach ($nilaiPreferensi as $alt_id => $nilai)
+                                @php
+                                    $ranking = collect($nilaiPreferensi)->sortDesc();
+                                    $rank = 1;
+                                @endphp
+                                @foreach ($ranking as $alt_id => $nilai)
                                     <tr>
                                         <td>{{ $rank++ }}</td>
                                         <td>{{ $alternatifs[$alt_id]->nama ?? 'A' . $alt_id }}</td>
@@ -170,11 +251,10 @@
                         </table>
                     </div>
 
-                    <a href="{{ route('nilai-alternatif.index') }}" class="btn btn-secondary">← Kembali ke Daftar</a>
+                    <a href="{{ route('nilai-alternatif.index') }}" class="btn btn-secondary">&larr; Kembali ke Daftar</a>
                 </div>
             </div>
         </div>
     </div>
-
     <script type="text/javascript" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 @endsection
