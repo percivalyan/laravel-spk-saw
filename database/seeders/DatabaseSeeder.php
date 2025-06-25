@@ -21,9 +21,10 @@ class DatabaseSeeder extends Seeder
             CategorySeeder::class,
             // SPKSAW1Seeder::class,
             // SPKWP1Seeder::class,
-            SPKTOPSIS1Seeder::class,
+            // SPKTOPSIS1Seeder::class,
             // KriteriaSeeder::class, // php artisan db:seed --class=KriteriaSeeder
             // AlternatifSeeder::class, // php artisan db:seed --class=AlternatifSeeder
+            JournalSeeder::class,
         ]);
     }
 }

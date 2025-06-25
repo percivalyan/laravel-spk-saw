@@ -79,7 +79,7 @@
                         </div>
                     @endforeach
 
-                    <h5 class="fw-bold mt-5">3. Matriks Normalisasi</h5>
+                    <h5 class="fw-bold mt-5">3. Matriks Normalisasi (Tabel)</h5>
                     <div class="table-responsive mb-4">
                         <table class="table table-bordered table-hover">
                             <thead class="table-light">
@@ -101,6 +101,25 @@
                                 @endforeach
                             </tbody>
                         </table>
+                    </div>
+
+                    <h5 class="fw-bold">3b. Matriks Normalisasi (Tampilan Matriks Seperti Gambar)</h5>
+                    <div class="mb-4">
+                        <pre class="bg-light p-3 rounded border" style="font-family: monospace; overflow-x: auto;">
+@php
+    $output = "[\n";
+    foreach ($normalisasi as $alt_id => $nilai) {
+        $output .= '  [';
+        $values = [];
+        foreach ($kriterias as $kriteria) {
+            $values[] = str_pad(number_format($nilai[$kriteria->id], 3), 5, '0', STR_PAD_RIGHT);
+        }
+        $output .= implode('  ', $values) . "],\n";
+    }
+    $output .= ']';
+    echo $output;
+@endphp
+    </pre>
                     </div>
 
                     <h5 class="fw-bold">4. Perhitungan Nilai Akhir Setiap Alternatif</h5>
